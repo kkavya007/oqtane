@@ -1,0 +1,116 @@
+@namespace Oqtane.Modules.Category
+@inherits ModuleBase
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using Oqtane.Modules.Category.Models
+@using Microsoft.AspNetCore.Components.Forms
+
+<h3 class="mb-4 text-primary">Category Management</h3>
+
+<table class="table table-striped table-hover">
+	<thead class="table-dark">
+		<tr>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (categories != null)
+		{
+			@foreach (var category in categories)
+			{
+				<tr>
+					<td>@category.Name</td>
+					<td>@category.Description</td>
+					<td>
+						<button class="btn btn-sm btn-outline-primary me-2" @onclick="() => EditCategory(category.CategoryId)">Edit</button>
+						<button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteCategory(category.CategoryId)">Delete</button>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+<button class="btn btn-success mt-3" @onclick="AddNewCategory">Add New Category</button>
+
+@if (editingCategory != null)
+{
+	<div class="card mt-4 shadow-sm">
+		<div class="card-header bg-primary text-white">
+			<h5 class="mb-0">@((editingCategory.CategoryId == 0) ? "Add New Category" : "Edit Category")</h5>
+		</div>
+		<div class="card-body">
+			<EditForm Model="editingCategory" OnValidSubmit="SaveCategory">
+				<DataAnnotationsValidator />
+				<ValidationSummary />
+
+				<div class="mb-3">
+					<label class="form-label">Name</label>
+					<InputText class="form-control" @bind-Value="editingCategory.Name" />
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Description</label>
+					<InputText class="form-control" @bind-Value="editingCategory.Description" />
+				</div>
+
+				<button type="submit" class="btn btn-primary">Save</button>
+				<button type="button" class="btn btn-secondary ms-2" @onclick="CancelEdit">Cancel</button>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+	private List<Models.Category> categories = new();
+	private Models.Category editingCategory;
+	private int moduleId;
+
+	protected override async Task OnInitializedAsync()
+	{
+		moduleId = ModuleState.ModuleId;
+		await LoadCategories();
+	}
+
+	private async Task LoadCategories()
+	{
+		categories = await Http.GetFromJsonAsync<List<Models.Category>>($"api/Category/{moduleId}");
+	}
+
+	private void AddNewCategory()
+	{
+		editingCategory = new Models.Category { ModuleId = moduleId };
+	}
+
+	private async Task EditCategory(int id)
+	{
+		editingCategory = await Http.GetFromJsonAsync<Models.Category>($"api/Category/{moduleId}/{id}");
+	}
+
+	private async Task SaveCategory()
+	{
+		if (editingCategory.CategoryId == 0)
+		{
+			await Http.PostAsJsonAsync("api/Category", editingCategory);
+		}
+		else
+		{
+			await Http.PutAsJsonAsync($"api/Category/{editingCategory.CategoryId}", editingCategory);
+		}
+
+		editingCategory = null;
+		await LoadCategories();
+	}
+
+	private async Task DeleteCategory(int id)
+	{
+		await Http.DeleteAsync($"api/Category/{id}");
+		await LoadCategories();
+	}
+
+	private void CancelEdit()
+	{
+		editingCategory = null;
+	}
+}
