@@ -22,37 +22,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\config" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\description" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\HEAD" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\applypatch-msg.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\commit-msg.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\fsmonitor-watchman.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\post-update.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\pre-applypatch.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\pre-commit.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\pre-merge-commit.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\pre-push.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\pre-rebase.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\pre-receive.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\prepare-commit-msg.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\push-to-checkout.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\sendemail-validate.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\hooks\update.sample" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\index" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\info\exclude" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\logs\HEAD" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\logs\refs\heads\main" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\logs\refs\remotes\origin\HEAD" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\objects\pack\pack-53b4359fc5fb8c65d301ddbea027c0339b41a217.idx" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\objects\pack\pack-53b4359fc5fb8c65d301ddbea027c0339b41a217.pack" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\objects\pack\pack-53b4359fc5fb8c65d301ddbea027c0339b41a217.rev" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\packed-refs" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\refs\heads\main" />
-    <None Include="Themes\Oqtane.Theme.Corporate\.git\refs\remotes\origin\HEAD" />
-    <None Include="Themes\Oqtane.Theme.Corporate\Client\Oqtane.Theme.Corporate.Client.csproj" />
-    <None Include="Themes\Oqtane.Theme.Corporate\Oqtane.Theme.Corporate.sln" />
-    <None Include="Themes\Oqtane.Theme.Corporate\Package\Oqtane.Theme.Corporate.Package.csproj" />
     <None Include="Themes\Teamx.Theme.practice\Client\Teamx.Theme.practice.Client.csproj" />
     <None Include="Themes\Teamx.Theme.practice\Package\Teamx.Theme.practice.Package.csproj" />
     <None Include="Themes\Teamx.Theme.practice\Teamx.Theme.practice.sln" />
@@ -73,11 +42,6 @@
     <Content Update="Installer\Controls\AzureSqlConfig.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Themes\Oqtane.Theme.Corporate\.git\objects\info\" />
-    <Folder Include="Themes\Oqtane.Theme.Corporate\.git\refs\tags\" />
   </ItemGroup>
 
   <PropertyGroup>
