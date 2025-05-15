@@ -25,7 +25,7 @@ using Oqtane.Providers;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
-using Oqtane.Modules.Category;
+using Oqtane.Modules.ProductForm.Models;
 using MySql.EntityFrameworkCore.Extensions;
 
 namespace Oqtane
@@ -175,9 +175,10 @@ namespace Oqtane
             services.TryAddSwagger(_useSwagger);
 
             // Add DbContext for UserFormContext
-            services.AddDbContext<CategoryContext>(options =>
-            options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));// With capital "L"
-
+            //services.AddDbContext<CategoryContext>(options =>
+            //options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));// With capital "L"
+            services.AddDbContext<ProductContext>(options =>
+            options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

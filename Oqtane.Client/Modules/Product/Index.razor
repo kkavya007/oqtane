@@ -1,0 +1,156 @@
+@namespace Oqtane.Modules.Product
+@inherits ModuleBase
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using Oqtane.Modules.ProductForm.Models
+@using Microsoft.AspNetCore.Components.Forms
+
+<h3>Product List</h3>
+
+<div class="mb-3 d-flex gap-2">
+	<input class="form-control" placeholder="Search by Name" @bind="searchName" @bind:event="oninput" />
+	<input class="form-control" placeholder="Search by Category" @bind="searchCategory" @bind:event="oninput" />
+</div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Product ID</th>
+			<th>Name</th>
+			<th>Image</th>
+			<th>Description</th>
+			<th>Category</th>
+			<th>Price</th>
+			<th>Quantity</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (products != null)
+		{
+			var filtered = products.Where(p =>
+			(string.IsNullOrWhiteSpace(searchName) || (p.Name != null && p.Name.Contains(searchName, StringComparison.OrdinalIgnoreCase))) &&
+			(string.IsNullOrWhiteSpace(searchCategory) || (p.Category != null && p.Category.Contains(searchCategory, StringComparison.OrdinalIgnoreCase)))
+			).ToList();
+
+			foreach (var product in filtered)
+			{
+				<tr>
+					<td>@product.ProductId</td>
+					<td>@product.Name</td>
+					<td><img src="@product.ImageUrl" alt="@product.Name" width="50" /></td>
+					<td>@product.Description</td>
+					<td>@product.Category</td>
+					<td>@product.Price.ToString("C")</td>
+					<td>@product.Quantity</td>
+					<td>
+						<button class="btn btn-sm btn-primary" @onclick="@(() => ShowEditModal(product.ProductId))">Edit</button>
+						<button class="btn btn-sm btn-danger" @onclick="@(() => DeleteProduct(product.ProductId))">Delete</button>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+<button class="btn btn-success" @onclick="ShowAddModal">Add New Product</button>
+
+@if (isModalVisible)
+{
+	<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">@((editingProduct.ProductId == 0) ? "Add New Product" : "Edit Product")</h5>
+					<button type="button" class="btn-close" @onclick="CloseModal"></button>
+				</div>
+				<div class="modal-body">
+					<EditForm Model="editingProduct" OnValidSubmit="SaveProduct">
+						<DataAnnotationsValidator />
+						<ValidationSummary />
+
+						<div class="mb-2">
+							<InputText class="form-control" @bind-Value="editingProduct.Name" placeholder="Name" />
+						</div>
+						<div class="mb-2">
+							<InputText class="form-control" @bind-Value="editingProduct.ImageUrl" placeholder="Image URL" />
+						</div>
+						<div class="mb-2">
+							<InputTextArea class="form-control" @bind-Value="editingProduct.Description" placeholder="Description" />
+						</div>
+						<div class="mb-2">
+							<InputText class="form-control" @bind-Value="editingProduct.Category" placeholder="Category" />
+						</div>
+						<div class="mb-2">
+							<InputNumber class="form-control" @bind-Value="editingProduct.Price" placeholder="Price" />
+						</div>
+						<div class="mb-2">
+							<InputNumber class="form-control" @bind-Value="editingProduct.Quantity" placeholder="Quantity" />
+						</div>
+
+						<button type="submit" class="btn btn-primary">Save</button>
+						<button type="button" class="btn btn-secondary ms-2" @onclick="CloseModal">Cancel</button>
+					</EditForm>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+	private List<Product> products = new();
+	private Product editingProduct = new();
+	private int moduleId;
+	private string searchName = string.Empty;
+	private string searchCategory = string.Empty;
+	private bool isModalVisible = false;
+
+	protected override async Task OnInitializedAsync()
+	{
+		moduleId = ModuleState.ModuleId;
+		await LoadProducts();
+	}
+
+	private async Task LoadProducts()
+	{
+		products = await Http.GetFromJsonAsync<List<Product>>($"api/ProductForm/Product/{moduleId}");
+	}
+
+	private void ShowAddModal()
+	{
+		editingProduct = new Product { ModuleId = moduleId };
+		isModalVisible = true;
+	}
+
+	private async Task ShowEditModal(int id)
+	{
+		editingProduct = await Http.GetFromJsonAsync<Product>($"api/ProductForm/Product/{moduleId}/{id}");
+		isModalVisible = true;
+	}
+
+	private async Task SaveProduct()
+	{
+		if (editingProduct.ProductId == 0)
+		{
+			await Http.PostAsJsonAsync("api/ProductForm/Product", editingProduct);
+		}
+		else
+		{
+			await Http.PutAsJsonAsync($"api/ProductForm/Product/{editingProduct.ProductId}", editingProduct);
+		}
+
+		isModalVisible = false;
+		await LoadProducts();
+	}
+
+	private async Task DeleteProduct(int id)
+	{
+		await Http.DeleteAsync($"api/ProductForm/Product/{id}");
+		await LoadProducts();
+	}
+
+	private void CloseModal()
+	{
+		isModalVisible = false;
+	}
+}
