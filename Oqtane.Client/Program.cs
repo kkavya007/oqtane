@@ -20,6 +20,7 @@ using Oqtane.Modules;
 using Oqtane.Services;
 using Oqtane.Shared;
 using Oqtane.UI;
+using Syncfusion.Blazor;
 
 namespace Oqtane.Client
 {
@@ -44,6 +45,9 @@ namespace Oqtane.Client
 
             // register scoped core services
             builder.Services.AddOqtaneClientScopedServices();
+
+            builder.Services.AddSyncfusionBlazor();
+
 
             var serviceProvider = builder.Services.BuildServiceProvider();
 
